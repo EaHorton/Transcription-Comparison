@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Overview · Transcription Atlas{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">A workspace for considered choices</p>
+  <h1>Find the right voice<br><i>for the archive.</i></h1>
+  <p class="hero-copy">Capture the details that matter across your transcription workflow. Score each service, leave notes, and see the story emerge.</p>
+  <a class="button dark" href="{{ url_for('comparison') }}">View comparison <span>↗</span></a>
+</section>
+<section class="section-heading">
+  <div><p class="eyebrow">01 / Your shortlist</p><h2>Four tools.<br><i>One clear view.</i></h2></div>
+  <p class="section-copy">Rate each platform from 1–10 across the criteria below. Your evaluations are saved locally and can be updated anytime.</p>
+</section>
+<section class="service-grid">
+  {% for slug, service in services.items() %}
+  {% set review = reviews[slug] %}
+  {% set total = review.ratings.values() | sum %}
+  {% set count = review.ratings | length %}
+  <a class="service-card" href="{{ url_for('service', service=slug) }}" style="--accent: {{ service.color }}">
+    <div class="card-top"><span class="number">0{{ loop.index }}</span><span class="card-status {% if count %}started{% endif %}">{% if count == categories|length %}COMPLETE{% elif count %}IN PROGRESS{% else %}NOT STARTED{% endif %}</span></div>
+    <div><h3>{{ service.name }}</h3><p>{{ service.tagline }}</p></div>
+    <div class="card-bottom"><span>{% if count %}{{ (total / count)|round(1) }} <small>/ 10 avg.</small>{% else %}— <small>not yet rated</small>{% endif %}</span><strong>Open notes ↗</strong></div>
+  </a>
+  {% endfor %}
+</section>
+<section class="callout"><span class="callout-icon">✳</span><div><p class="eyebrow">A note on the numbers</p><p>There is no universal “best” tool. Use the scores to surface tradeoffs, then let your notes hold the nuance.</p></div><a href="{{ url_for('comparison') }}">See your data ↗</a></section>
+{% endblock %}

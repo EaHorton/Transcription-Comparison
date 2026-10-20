@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Comparison · Transcription Atlas{% endblock %}
+{% block content %}
+<div class="page-intro comparison-intro"><p class="eyebrow">02 / Synthesis</p><h1>The lay of the land<i>.</i></h1><p>A visual snapshot of your evaluations. Complete more service reviews to make this view more useful.</p></div>
+<section class="comparison-summary">
+  {% for item in summaries %}
+  <article class="summary-card" style="--accent: {{ item.color }}">
+    <div class="donut" style="--score: {{ item.average * 10 }}%;"><span>{{ item.average or '—' }}<small>/10</small></span></div>
+    <div><span class="card-status {% if item.complete %}started{% endif %}">{{ item.count }}/{{ categories|length }} SCORED</span><h3>{{ item.name }}</h3><a href="{{ url_for('service', service=item.slug) }}">Edit review ↗</a></div>
+  </article>
+  {% endfor %}
+</section>
+<section class="panel breakdown-panel"><div class="panel-heading"><div><p class="eyebrow">Side by side</p><h2>Category breakdown</h2></div><span class="scale-label">Out of 10</span></div>
+  <div class="chart">
+    <div class="chart-legend">{% for item in summaries %}<span><i style="background: {{ item.color }}"></i>{{ item.name }}</span>{% endfor %}</div>
+    {% for key, label, description in categories %}
+    <div class="bar-row"><strong>{{ label }}</strong><div class="bars">{% for item in summaries %}<div class="bar-track" title="{{ item.name }}: {{ item.ratings.get(key, '—') }}"><span style="width: {{ item.ratings.get(key, 0) * 10 }}%; background: {{ item.color }}"></span></div>{% endfor %}</div><div class="bar-values">{% for item in summaries %}<b>{{ item.ratings.get(key, '—') }}</b>{% endfor %}</div></div>
+    {% endfor %}
+  </div>
+</section>
+<p class="comparison-footnote">Scores are a starting point, not a verdict. <a href="{{ url_for('index') }}">Keep exploring ↗</a></p>
+{% endblock %}

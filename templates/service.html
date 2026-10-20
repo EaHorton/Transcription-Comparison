@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ service.name }} · Transcription Atlas{% endblock %}
+{% block content %}
+<div class="page-intro">
+  <a class="back-link" href="{{ url_for('index') }}">← All services</a>
+  <p class="eyebrow">Service 0{{ (services.keys()|list).index(slug) + 1 }} / 04</p>
+  <h1>{{ service.name }}<i>.</i></h1>
+  <p>{{ service.description }}</p>
+</div>
+<form method="post" class="review-layout">
+  <section class="panel rating-panel">
+    <div class="panel-heading"><div><p class="eyebrow">Your assessment</p><h2>Rate the essentials</h2></div><span class="scale-label">1 — 10</span></div>
+    <p class="muted">Choose the score that best reflects your experience. You can revise these whenever your testing evolves.</p>
+    {% for key, label, description in categories %}
+    <div class="rating-row">
+      <div class="rating-label"><strong>{{ label }}</strong><span>{{ description }}</span></div>
+      <div class="score-options">
+        {% for score in range(1, 11) %}
+        <label><input type="radio" name="{{ key }}" value="{{ score }}" {% if review.ratings.get(key) == score %}checked{% endif %}><span>{{ score }}</span></label>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+  <section class="panel notes-panel">
+    <div class="panel-heading"><div><p class="eyebrow">Field notes</p><h2>Keep the nuance</h2></div><span class="note-symbol">✎</span></div>
+    <p class="muted">What surprised you? What would you tell someone considering this tool?</p>
+    <textarea name="notes" placeholder="Start writing your observations…">{{ review.notes }}</textarea>
+    <div class="save-row"><span class="save-hint">Saved locally to this workspace</span><button class="button dark" type="submit">Save review <span>↗</span></button></div>
+  </section>
+</form>
+{% endblock %}
