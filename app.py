@@ -14,24 +14,28 @@ SERVICES = {
         "name": "Transkribus",
         "tagline": "Specialist handwriting recognition for heritage collections",
         "description": "A powerful platform for historical documents, custom models, and large-scale archival work.",
+        "website": "https://www.transkribus.org/",
         "color": "#d97757",
     },
     "seeklight": {
         "name": "Seeklight",
         "tagline": "Fast, flexible transcription for modern workflows",
         "description": "A streamlined option for teams that want quick results and an approachable interface.",
+        "website": "https://about-jstor-org.libproxy.clemson.edu/products/digital-stewardship/seeklight/",
         "color": "#4f7cac",
     },
     "archivault": {
         "name": "Archivault",
         "tagline": "Organize and preserve your digitized archive",
         "description": "Built around discoverability, organization, and keeping project context close to every file.",
+        "website": "https://archivault.ai/",
         "color": "#7c6aa6",
     },
     "ai-vision-ocr": {
         "name": "AI-Vision OCR",
         "tagline": "Vision-powered OCR for broad document coverage",
         "description": "A flexible AI approach for quickly testing a wide range of layouts and document types.",
+        "website": "https://github.com/EaHorton/Handwritten_Transcriptions",
         "color": "#3d927f",
     },
 }
@@ -67,11 +71,20 @@ def create_app(test_config=None):
             CREATE TABLE IF NOT EXISTS service_reviews (
                 service TEXT PRIMARY KEY,
                 ratings TEXT NOT NULL DEFAULT '{}',
+                overview TEXT NOT NULL DEFAULT '',
                 notes TEXT NOT NULL DEFAULT '',
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
             """
         )
+        columns = {
+            row["name"]
+            for row in db.execute("PRAGMA table_info(service_reviews)").fetchall()
+        }
+        if "overview" not in columns:
+            db.execute(
+                "ALTER TABLE service_reviews ADD COLUMN overview TEXT NOT NULL DEFAULT ''"
+            )
         for slug in SERVICES:
             db.execute(
                 "INSERT OR IGNORE INTO service_reviews (service) VALUES (?)", (slug,)
@@ -91,6 +104,7 @@ def create_app(test_config=None):
         return {
             row["service"]: {
                 "ratings": json.loads(row["ratings"]),
+                "overview": row["overview"],
                 "notes": row["notes"],
                 "updated_at": row["updated_at"],
             }
@@ -137,6 +151,33 @@ def create_app(test_config=None):
             service=SERVICES[service],
             slug=service,
             review=reviews[service],
+        )
+
+    @app.route("/service/<service>/overview", methods=("GET", "POST"))
+    def service_overview(service):
+        if service not in SERVICES:
+            return render_template("404.html"), 404
+        if request.method == "POST":
+            overview = request.form.get("overview", "").strip()
+            db = get_db()
+            init_db()
+            db.execute(
+                """
+                UPDATE service_reviews
+                SET overview = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE service = ?
+                """,
+                (overview, service),
+            )
+            db.commit()
+            flash(f"{SERVICES[service]['name']} overview saved.", "success")
+            return redirect(url_for("service_overview", service=service))
+
+        return render_template(
+            "overview.html",
+            service=SERVICES[service],
+            slug=service,
+            review=get_reviews()[service],
         )
 
     @app.route("/comparison")

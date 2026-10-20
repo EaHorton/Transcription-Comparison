@@ -1,0 +1,120 @@
+.overview-panel {
+  grid-column: 1 / -1;
+}
+
+.overview-section {
+  max-width: 1120px;
+  margin: 0 auto 16px;
+}
+
+.website-link {
+  display: inline-flex;
+  gap: 10px;
+  margin-top: 22px;
+  color: var(--orange);
+  font: 10px "DM Mono", monospace;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.website-link span {
+  font-size: 15px;
+}
+
+.overview-panel textarea {
+  min-height: 130px;
+  margin: 20px 0 0;
+}
+
+.overview-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 22px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  color: var(--orange);
+  font: 12px "DM Mono", monospace;
+  text-transform: uppercase;
+}
+
+.overview-link strong {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.overview-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, .8fr);
+  gap: 16px;
+  max-width: 1120px;
+  margin: 0 auto 100px;
+}
+
+.overview-reading {
+  min-height: 430px;
+}
+
+.overview-content {
+  padding: 32px 8px 10px 0;
+  color: var(--ink);
+  font: 19px/1.85 "Playfair Display", serif;
+  white-space: pre-wrap;
+}
+
+.empty-overview {
+  max-width: 460px;
+  margin-top: 32px;
+  color: var(--muted);
+  font: 18px/1.7 "Playfair Display", serif;
+}
+
+.overview-editor {
+  align-self: start;
+}
+
+.overview-editor textarea {
+  width: 100%;
+  min-height: 250px;
+  resize: vertical;
+  border: 1px solid #d2d0c7;
+  background: transparent;
+  padding: 17px;
+  margin: 20px 0;
+  color: var(--ink);
+  font: 14px/1.6 "DM Sans", sans-serif;
+}
+
+.overview-editor textarea:focus {
+  outline: 1px solid var(--orange);
+}
+
+.overview-preview {
+  margin: 18px 0 0 !important;
+  color: var(--ink) !important;
+  font: 12px/1.5 "Playfair Display", serif !important;
+}
+
+@media (max-width: 750px) {
+  .overview-panel {
+    grid-column: auto;
+  }
+
+  .overview-section {
+    width: auto;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  .overview-page {
+    grid-template-columns: 1fr;
+    width: auto;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  .overview-content {
+    font-size: 17px;
+  }
+}

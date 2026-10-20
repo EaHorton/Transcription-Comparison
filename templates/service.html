@@ -6,7 +6,15 @@
   <p class="eyebrow">Service 0{{ (services.keys()|list).index(slug) + 1 }} / 04</p>
   <h1>{{ service.name }}<i>.</i></h1>
   <p>{{ service.description }}</p>
+  <a class="website-link" href="{{ service.website }}" target="_blank" rel="noopener noreferrer">Visit official website <span>↗</span></a>
 </div>
+<section class="panel overview-panel overview-section">
+    <div class="panel-heading"><div><p class="eyebrow">Before you test</p><h2>General overview</h2></div><span class="note-symbol">↗</span></div>
+    <p class="muted">Read the background information you have collected about this tool, or add to it as your research develops.</p>
+    <a class="overview-link" href="{{ url_for('service_overview', service=slug) }}">
+      <span>{% if review.overview %}Read your general overview{% else %}Add a general overview{% endif %}</span><strong>↗</strong>
+    </a>
+  </section>
 <form method="post" class="review-layout">
   <section class="panel rating-panel">
     <div class="panel-heading"><div><p class="eyebrow">Your assessment</p><h2>Rate the essentials</h2></div><span class="scale-label">1 — 10</span></div>

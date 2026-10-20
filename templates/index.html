@@ -18,7 +18,7 @@
   {% set count = review.ratings | length %}
   <a class="service-card" href="{{ url_for('service', service=slug) }}" style="--accent: {{ service.color }}">
     <div class="card-top"><span class="number">0{{ loop.index }}</span><span class="card-status {% if count %}started{% endif %}">{% if count == categories|length %}COMPLETE{% elif count %}IN PROGRESS{% else %}NOT STARTED{% endif %}</span></div>
-    <div><h3>{{ service.name }}</h3><p>{{ service.tagline }}</p></div>
+    <div><h3>{{ service.name }}</h3><p>{{ service.tagline }}</p>{% if review.overview %}<p class="overview-preview">{{ review.overview|truncate(105) }}</p>{% endif %}</div>
     <div class="card-bottom"><span>{% if count %}{{ (total / count)|round(1) }} <small>/ 10 avg.</small>{% else %}— <small>not yet rated</small>{% endif %}</span><strong>Open notes ↗</strong></div>
   </a>
   {% endfor %}

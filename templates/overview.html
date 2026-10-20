@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ service.name }} overview · Transcription Atlas{% endblock %}
+{% block content %}
+<div class="page-intro overview-intro">
+  <a class="back-link" href="{{ url_for('service', service=slug) }}">← Back to {{ service.name }}</a>
+  <p class="eyebrow">Service overview</p>
+  <h1>{{ service.name }}<i>.</i></h1>
+  <p>{{ service.description }}</p>
+  <a class="website-link" href="{{ service.website }}" target="_blank" rel="noopener noreferrer">Visit official website <span>↗</span></a>
+</div>
+<div class="overview-page">
+  <section class="overview-reading panel">
+    <div class="panel-heading"><div><p class="eyebrow">Background notes</p><h2>General overview</h2></div><span class="note-symbol">✦</span></div>
+    {% if review.overview %}
+      <div class="overview-content">{{ review.overview }}</div>
+    {% else %}
+      <p class="empty-overview">No overview has been added yet. Use the editor below to capture what you have learned.</p>
+    {% endif %}
+  </section>
+  <section class="overview-editor panel">
+    <div class="panel-heading"><div><p class="eyebrow">Keep researching</p><h2>Edit overview</h2></div><span class="note-symbol">✎</span></div>
+    <p class="muted">Add background information, pricing, strengths, limitations, or other context you want to remember.</p>
+    <form method="post">
+      <textarea name="overview" placeholder="Write your overview here…">{{ review.overview }}</textarea>
+      <div class="save-row"><span class="save-hint">Saved locally to this workspace</span><button class="button dark" type="submit">Save overview <span>↗</span></button></div>
+    </form>
+  </section>
+</div>
+{% endblock %}
